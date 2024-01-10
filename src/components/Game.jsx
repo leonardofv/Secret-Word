@@ -1,19 +1,29 @@
 import './Game.css';
 
-  const Game = ( {verifyLetter} ) => {
+  const Game = ( {verifyLetter, pickedWord, pickedCategory, letters, guessedLetters, wrongLetters, attempts, score} ) => {
+    // Depois de passar como props é só ir substituindo
     return (
+
       <div className="game">
-         <h1>Advinhe a Palavra</h1>
+        <h1>Advinhe a Palavra</h1>
         <p className="pontos">
-          <span>Pontuação: 00</span>
+          <span>Pontuação: {score}</span>
         </p>
         <h3 className="dica">
-          Dica sobre a palavra <span>Dica...</span>
+          Dica sobre a palavra <span>{pickedCategory}</span>
         </h3>
+        <p>Você ainda tem {attempts} tentativa(s).</p>
+         {/* Container da palavra */}
         <div className="wordContainer">
-          <span className="letter">A</span>
-          <span className="blankSquare"></span>
+          {letters.map((letra, i) => (
+            guessedLetters.includes(letra) ? (
+              <span key={i} className="letter">{letra}</span>
+            ) : (
+              <span key={i} className="blankSquare"></span>
+            )
+          ))}
         </div>
+        {/* Container da letra */}
         <div className="letterContainer">
           <p>Tente advinhar uma letra da palavra</p>
           <form>
@@ -21,10 +31,12 @@ import './Game.css';
             <button>Jogar</button>
           </form>
         </div>
+        {/* Letras utilizadas */}
         <div className="letrasUtilizadas">
             <p>Letras já utilizadas</p>
-            <span>a, </span>
-            <span>b, </span>
+            {wrongLetters.map((letra,i) => (
+              <span key={i}>{letra},</span>
+            ))}
         </div>
       </div>
     )
