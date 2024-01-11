@@ -15,6 +15,8 @@ const stages = [ //estágios do jogo
   {id: 3, name: "end"}
 ];
 
+const attempstsQty = 3;
+
 function App() {
 
   const [gameStage, setGameStage] = useState(stages[0].name); 
@@ -25,7 +27,7 @@ function App() {
   
   const [guessedLetters, setGuessedLetters] = useState([]); //letras advinhadas
   const [wrongLetters, setWrongLetters] = useState([]); // letras erradas
-  const [attempts, setAtempts] = useState(3); //tentativas
+  const [attempts, setAttempts] = useState(attempstsQty); //tentativas
   const [score, setScore] = useState(0);
 
   
@@ -80,16 +82,38 @@ function App() {
       setWrongLetters((actualWrongLetters) => [
         ...actualWrongLetters, normalizedLetter
       ])
+      //diminuir pontuação ao errar letra
+      setAttempts((actualAttempts) => actualAttempts - 1);
+    }
+  }
+
+  //limpar letras acertadas e erradas após acabar as chances
+  const clearLetterStates = () => {
+    setGuessedLetters([]);
+    setWrongLetters([]);
+  }
+
+  //monitora um dado, como segundo parâmetro o dado para monitorar entre colchetes
+  useEffect(() => {
+
+    if(attempts <= 0) {
+      //reset all stages
+      clearLetterStates();
+      //finaliza o jogo
+      setGameStage(stages[2].name);
     }
 
-  }
+  },[attempts])
 
   //restart the game
   const retry = () => {
+    setScore(0);         // Pontuação e tentativas resetadas quando resetar o jogo
+    setAttempts(attempstsQty)
     setGameStage(stages[0].name);
   }
  
   return (
+
     <div className='App'>
       {gameStage === 'start' && <StartScreen startGame={startGame} />}
       {gameStage === 'game' && (
