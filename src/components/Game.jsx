@@ -1,7 +1,20 @@
+import { useState, useRef } from 'react';
 import './Game.css';
 
   const Game = ( {verifyLetter, pickedWord, pickedCategory, letters, guessedLetters, wrongLetters, attempts, score} ) => {
     // Depois de passar como props é só ir substituindo
+
+    const [letter, setLetter] = useState("");
+    // Use ref faz referência a algo
+    const letterInputRef = useRef(null); //após colocar o atributo ref no input, partimos para o handleSubmit para dar foco
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      verifyLetter(letter);
+      setLetter(""); {/* apagar input */}
+      letterInputRef.current.focus();
+    }
+
     return (
 
       <div className="game">
@@ -26,8 +39,8 @@ import './Game.css';
         {/* Container da letra */}
         <div className="letterContainer">
           <p>Tente advinhar uma letra da palavra</p>
-          <form>
-            <input type="text" name="letter" maxLength="1" required/>
+          <form onSubmit={handleSubmit}>
+            <input type="text" name="letter" maxLength="1" required onChange={(event) => setLetter(event.target.value)} value={letter} ref={letterInputRef}/>
             <button>Jogar</button>
           </form>
         </div>

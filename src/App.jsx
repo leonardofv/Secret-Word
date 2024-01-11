@@ -60,8 +60,9 @@ function App() {
     setGameStage(stages[1].name);
   };
   //process the letter input
-  const verifyLetter = () => {
-    setGameStage(stages[2].name);
+  const verifyLetter = (letter) => {
+    // setGameStage(stages[2].name);
+    console.log(letter);  
   }
   //restart the game
   const retry = () => {
