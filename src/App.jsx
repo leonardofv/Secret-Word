@@ -31,7 +31,7 @@ function App() {
   const [score, setScore] = useState(0);
 
   
-  const pickWordAndCategory = () => {
+  const pickWordAndCategory = useCallback(() => {
     //pick a random category
     const categories = Object.keys(words); //pegando categoria da lista
     const category = categories[Math.floor(Math.random() * Object.keys(categories).length)]; //category random
@@ -41,10 +41,17 @@ function App() {
     console.log(word);
 
     return { category, word }; //retornar como um objeto
-  }
+  },[words]);
 
   //start the secret word game
-  const startGame = () => {
+  const startGame = useCallback(() => { 
+    //A função startGame faz com que as depêndencias di gancho do useEffect mudem em cada renderização. Para
+    // corrigir envolvemos a definição de startGame em seu próprio useCallback gancho.
+    // e coloco como dependência a função que executo no no mesmo.
+
+    //Limpar letras no inicio do jogo, após acertar a palvra. Reseta tudo
+    clearLetterStates();
+
     //pick word and category
     const { category, word } = pickWordAndCategory();
     //create an array of letters
@@ -60,7 +67,8 @@ function App() {
     setLetters(wordLetters);
 
     setGameStage(stages[1].name);
-  };
+  },[pickWordAndCategory]);
+
   //process the letter input
   const verifyLetter = (letter) => {
     // setGameStage(stages[2].name);
@@ -95,7 +103,7 @@ function App() {
 
   //monitora um dado, como segundo parâmetro o dado para monitorar entre colchetes
   useEffect(() => {
-
+    //check if attempts ended
     if(attempts <= 0) {
       //reset all stages
       clearLetterStates();
@@ -104,6 +112,25 @@ function App() {
     }
 
   },[attempts])
+
+  //check win condition
+  useEffect(() => {
+
+    //tranforma as letras acertadas em um arr de letras únicas para o usuário não precisar digitar a mesma letra duas vezes
+    const uniqueLetters = [...new Set(letters)];
+    console.log(uniqueLetters);
+
+    //win cindition
+    if(guessedLetters.length === uniqueLetters.length) {
+      //add score
+      // setScore((actualScore) => actualScore += 10);
+      setScore(score+10);
+
+      //restart the game with new word
+      startGame();
+    }
+
+  },[guessedLetters, letters, score, startGame]); //monitora as letras advinhadas
 
   //restart the game
   const retry = () => {
@@ -127,7 +154,7 @@ function App() {
         attempts={attempts}
         score={score}        
         />)}
-      {gameStage === 'end' && <GameOver retry={retry} />}
+      {gameStage === 'end' && <GameOver retry={retry} score={score} />}
     </div>
   )
 }
