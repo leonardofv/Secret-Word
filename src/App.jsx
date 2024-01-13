@@ -15,7 +15,7 @@ const stages = [ //estágios do jogo
   {id: 3, name: "end"}
 ];
 
-const attempstsQty = 3;
+const attempstsQty = 5;
 
 function App() {
 
@@ -123,8 +123,8 @@ function App() {
     //win cindition
     if(guessedLetters.length === uniqueLetters.length) {
       //add score
-      // setScore((actualScore) => actualScore += 10);
-      setScore(score+10);
+      setScore((actualScore) => actualScore += 10);
+      
 
       //restart the game with new word
       startGame();
