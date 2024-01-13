@@ -21,6 +21,7 @@ function App() {
 
   const [gameStage, setGameStage] = useState(stages[0].name); 
   const [words] = useState(wordsList); //lista de palavras
+
   const [pickedWord, setPickedWord] = useState(""); //palavra escolhida
   const [pickedCategory, setPickedCategory] = useState(""); //categoria escolhida
   const [letters, setLetters] = useState([]); //lista de letras
@@ -51,7 +52,7 @@ function App() {
 
     //Limpar letras no inicio do jogo, após acertar a palvra. Reseta tudo
     clearLetterStates();
-
+    
     //pick word and category
     const { category, word } = pickWordAndCategory();
     //create an array of letters
@@ -78,7 +79,7 @@ function App() {
     // check if letter has already been 
     //para o usuário não perder chance com letras já utilizadas
     if(guessedLetters.includes(normalizedLetter) || wrongLetters.includes(normalizedLetter)) {
-      return
+      return;
     }
 
     //Push guessed letter or remove a chence
@@ -90,9 +91,16 @@ function App() {
       setWrongLetters((actualWrongLetters) => [
         ...actualWrongLetters, normalizedLetter
       ])
-      //diminuir pontuação ao errar letra
+      //diminuir as tentativas ao errar letra
       setAttempts((actualAttempts) => actualAttempts - 1);
     }
+  }
+
+  //restart the game
+  const retry = () => {
+    setScore(0);         // Pontuação e tentativas resetadas quando resetar o jogo
+    setAttempts(attempstsQty)
+    setGameStage(stages[0].name);
   }
 
   //limpar letras acertadas e erradas após acabar as chances
@@ -104,7 +112,7 @@ function App() {
   //monitora um dado, como segundo parâmetro o dado para monitorar entre colchetes
   useEffect(() => {
     //check if attempts ended
-    if(attempts <= 0) {
+    if(attempts === 0) {
       //reset all stages
       clearLetterStates();
       //finaliza o jogo
@@ -122,22 +130,16 @@ function App() {
 
     //win cindition
     if(guessedLetters.length === uniqueLetters.length) {
-      //add score
-      setScore((actualScore) => actualScore += 10);
-      
 
+      //add score
+      setScore((actualScore) => (actualScore += 10));
+      
       //restart the game with new word
       startGame();
+      
     }
 
-  },[guessedLetters, letters, score, startGame]); //monitora as letras advinhadas
-
-  //restart the game
-  const retry = () => {
-    setScore(0);         // Pontuação e tentativas resetadas quando resetar o jogo
-    setAttempts(attempstsQty)
-    setGameStage(stages[0].name);
-  }
+  },[guessedLetters, setScore, letters, startGame]); //monitora as letras advinhadas
  
   return (
 
@@ -157,6 +159,6 @@ function App() {
       {gameStage === 'end' && <GameOver retry={retry} score={score} />}
     </div>
   )
-}
+} 
 
 export default App

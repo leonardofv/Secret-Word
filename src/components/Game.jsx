@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import './Game.css';
 
-  const Game = ( {verifyLetter, pickedWord, pickedCategory, letters, guessedLetters, wrongLetters, attempts, score} ) => {
+  const Game = ( {verifyLetter, pickedCategory, letters, guessedLetters, wrongLetters, attempts, score} ) => {
     // Depois de passar como props é só ir substituindo
 
     const [letter, setLetter] = useState("");
@@ -18,12 +18,12 @@ import './Game.css';
     return (
 
       <div className="game">
-        <h1>Advinhe a Palavra</h1>
+        <h1>Adivinhe a Palavra</h1>
         <p className="pontos">
           <span>Pontuação: {score}</span>
         </p>
         <h3 className="dica">
-          Dica sobre a palavra <span>{pickedCategory}</span>
+          Dica sobre a palavra: <span>{pickedCategory}</span>
         </h3>
         <p>Você ainda tem {attempts} tentativa(s).</p>
          {/* Container da palavra */}
