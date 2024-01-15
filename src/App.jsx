@@ -30,7 +30,6 @@ function App() {
   const [wrongLetters, setWrongLetters] = useState([]); // letras erradas
   const [attempts, setAttempts] = useState(attempstsQty); //tentativas
   const [score, setScore] = useState(0);
-
   
   const pickWordAndCategory = useCallback(() => {
     //pick a random category
@@ -46,7 +45,8 @@ function App() {
 
   //start the secret word game
   const startGame = useCallback(() => { 
-    //A função startGame faz com que as depêndencias di gancho do useEffect mudem em cada renderização. Para
+    
+    //A função startGame faz com que as depêndencias de gancho do useEffect mudem em cada renderização. Para
     // corrigir envolvemos a definição de startGame em seu próprio useCallback gancho.
     // e coloco como dependência a função que executo no no mesmo.
 
@@ -109,7 +109,7 @@ function App() {
     setWrongLetters([]);
   }
 
-  //monitora um dado, como segundo parâmetro o dado para monitorar entre colchetes
+  //monitora um dado como segundo parâmetro
   useEffect(() => {
     //check if attempts ended
     if(attempts === 0) {
@@ -132,13 +132,11 @@ function App() {
     if(guessedLetters.length === uniqueLetters.length) {
 
       //add score
-      setScore((actualScore) => (actualScore += 10));
+      setScore((actualScore) => actualScore += 10);
       
       //restart the game with new word
       startGame();
-      
     }
-
   },[guessedLetters, setScore, letters, startGame]); //monitora as letras advinhadas
  
   return (
