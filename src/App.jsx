@@ -126,18 +126,19 @@ function App() {
 
     //tranforma as letras acertadas em um arr de letras únicas para o usuário não precisar digitar a mesma letra duas vezes
     const uniqueLetters = [...new Set(letters)];
-    console.log(uniqueLetters);
 
     //win cindition
-    if(guessedLetters.length === uniqueLetters.length) {
+    if(guessedLetters.length === uniqueLetters.length && gameStage === stages[1].name) {
 
       //add score
-      setScore((actualScore) => actualScore += 10);
+      setScore((actualScore) => (actualScore += 10));
       
       //restart the game with new word
-      startGame();
+      setTimeout(() => {
+        startGame();
+      },1000);
     }
-  },[guessedLetters, setScore, letters, startGame]); //monitora as letras advinhadas
+  },[guessedLetters, letters, startGame, gameStage]); //monitora as letras advinhadas
  
   return (
 

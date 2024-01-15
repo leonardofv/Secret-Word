@@ -38,7 +38,7 @@ import './Game.css';
         </div>
         {/* Container da letra */}
         <div className="letterContainer">
-          <p>Tente advinhar uma letra da palavra</p>
+          <p>Tente adivinhar uma letra da palavra</p>
           <form onSubmit={handleSubmit}>
             <input type="text" name="letter" maxLength="1" required onChange={(event) => setLetter(event.target.value)} value={letter} ref={letterInputRef}/>
             <button>Jogar</button>
